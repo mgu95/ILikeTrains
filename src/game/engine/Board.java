@@ -1,0 +1,127 @@
+package game.engine;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
+
+public class Board {
+
+    private int width;
+    private int height;
+    private Field[][] fields;
+    private Set<City> cities;
+    private Set<Route> routes;
+    private Set<Connection> connections;
+
+
+    public Board(int width, int height, int amountOfCities) {
+
+        this.width = width;
+        this.height = height;
+        fields = new Field[width][height];
+        generateCities(amountOfCities);
+        placeCities();
+        connectCities();
+    }
+
+    private void connectCities() {
+
+        String[] colors = new String[]{"Czerwony", "Żółty", "Niebieski", "Zielony", "Różowy"};
+
+
+
+//        for (int i = 0; i < width; i++) {
+//            for (int j = 0; j < height; j++) {
+//                if (fields[i][j] == null) {
+//                } else if (fields[i][j].getClass() == City.class) {
+//                    //szukanie somsiada w prawo
+//                    System.out.println("pole = [" + i + "][" + j + "]");
+//                    for (int k = i; k < width; k++) {
+//                        if (fields[k][j] == null) {
+//                        } else if (fields[k][j].getClass() == City.class) {
+//                            System.out.println("Jest somsiad: [" + k + "][" + j + "]");
+//                            System.out.println("i = " + i + ", j = " + j + ", k =" + k);
+//                            Route route = new Route(k - i, colors[new Random().nextInt(colors.length)]);
+//                            System.out.println(route.toString());
+//                            for (int l = i + 1; l < k - 1; l++) {
+//                                fields[l][j] = route;
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+    }
+
+    private void placeCities() {
+
+        Iterator<City> iterator = cities.iterator();
+        while (iterator.hasNext()) {
+            int randomWidth = new Random().nextInt(width);
+            int randomHeight = new Random().nextInt(height);
+            if (fields[randomWidth][randomHeight] == null) {
+                if (!hasNeighbor(randomWidth, randomHeight)) {
+                    fields[randomWidth][randomHeight] = iterator.next();
+                }
+            }
+        }
+    }
+
+    private boolean hasNeighbor(int randomWidth, int randomHeight) {
+
+        for (int i = randomWidth - 1; i < randomWidth + 2; i++) {
+            for (int j = randomHeight - 1; j < randomHeight + 2; j++) {
+                try {
+                    if (fields[i][j] == null) {
+                    } else if (fields[i][j].getClass() == City.class) {
+                        return true;
+                    }
+                } catch (ArrayIndexOutOfBoundsException aioobe) {}
+            }
+        }
+
+        return false;
+    }
+
+    private void generateCities(int amount) {
+
+        String[] cityNames = new String[]{"Tirana", "Andora", "Wiedeń", "Bruksela", "Mińsk", "Sarajewo", "Sofia",
+                "Zagrzeb", "Kopenhaga", "Tallin", "Helsinki", "Paryż", "Ateny", "Madryt", "Amsterdam", "Dublin",
+                "Rejkiawik", "Astana", "Moskwa", "Bukareszt", "San Marino", "Bratysława", "Lublana", "Berno",
+                "Sztokholm", "Ankara", "Kijów", "Watykan", "Budapeszt", "Londyn", "Rzym"};
+        cities = new HashSet<>();
+        while (cities.size() < amount) {
+            cities.add(new City(cityNames[new Random().nextInt(cityNames.length)]));
+        }
+    }
+
+    public void printBoard() {
+
+        StringBuilder board = new StringBuilder("  ");
+        StringBuilder legend = new StringBuilder("Legenda:\n");
+        for (int i = 1; i < height + 1; i++) {
+            board.append(" " + (char)(i + 64));
+        }
+        for (int i = 0; i < width; i++) {
+            board.append("\n " + (i + 1));
+            for (int j = 0; j < height; j++) {
+                if (fields[i][j] == null) {
+                    board.append("  ");
+                } else if (fields[i][j].getClass() == City.class) {
+                    board.append(" #");
+                    legend.append((char)(j + 65) + "" + (i + 1) + " "
+                            + fields[i][j].toString().substring(11, fields[i][j].toString().length() - 2) + "\n");
+                } else if (fields[i][j].getClass() == Route.class) {
+                    System.out.println("JEST KURW TRASA");
+                    board.append(" " + fields[i][j].toString());
+                }
+            }
+        }
+
+        System.out.println(board.toString());
+        System.out.println();
+        System.out.println(legend.toString());
+    }
+}
