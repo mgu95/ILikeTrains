@@ -1,6 +1,7 @@
 package game;
 
 import game.engine.Board;
+import game.engine.tools.GameRules;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +12,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Board board = new Board(5, 10, 10);
+
+        GameRules gameRules = new GameRules();
+        gameRules.setBoardHeight(10);
+        gameRules.setBoardWidth(20);
+        gameRules.setAmountOfCities(10);
+        Board board = new Board(gameRules);
         board.printBoard();
 
 //        Parent root = FXMLLoader.load(getClass().getResource("sample.sample.fxml"));

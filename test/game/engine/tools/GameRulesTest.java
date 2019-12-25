@@ -108,22 +108,22 @@ class GameRulesTest {
     }
 
     @Test
-    void WidthOfTheBoardIsAsMuchAsMaxBoardHeight() throws BoardDimensionsException {
+    void WidthOfTheBoardIsAsMuchAsMaxBoardHeight() throws BoardDimensionsException, GameParameterIsAlreadySetException {
         Assertions.assertTrue(gameRules.setBoardWidth(gameRules.getMaxBoardWidth()));
     }
 
     @Test
-    void WidthOfTheBoardIsAsMuchAsMinBoardHeight() throws BoardDimensionsException {
+    void WidthOfTheBoardIsAsMuchAsMinBoardHeight() throws BoardDimensionsException, GameParameterIsAlreadySetException {
         Assertions.assertTrue(gameRules.setBoardWidth(gameRules.getMinBoardWidth()));
     }
 
     @Test
-    void WidthOfTheBoardIsOk() throws BoardDimensionsException {
+    void WidthOfTheBoardIsOk() throws BoardDimensionsException, GameParameterIsAlreadySetException {
         Assertions.assertTrue(gameRules.setBoardWidth(gameRules.getMinBoardWidth() + 1));
     }
 
     @Test
-    void setBoardWidthAgain() throws BoardDimensionsException {
+    void setBoardWidthAgain() throws BoardDimensionsException, GameParameterIsAlreadySetException {
 
         gameRules.setBoardWidth(gameRules.getMinBoardWidth() + 1);
 
@@ -146,12 +146,11 @@ class GameRulesTest {
     }
 
     @Test
-    void AmountOfTheCitiesIsTooLarge() throws BoardDimensionsException, GameParameterIsAlreadySetException {
+    void AmountOfTheCitiesIsTooLarge() throws BoardDimensionsException, GameParameterIsAlreadySetException, NoGameParameterException {
 
         gameRules.setBoardHeight(10);
         gameRules.setBoardWidth(20);
-        int maxAmountOfCities = gameRules.getBoardHeight() * gameRules.getBoardWidth()
-                / gameRules.getMaxProcentRatioOfCitiesToTheNumberOfFields();
+        int maxAmountOfCities = gameRules.getMaxAmountOfCities();
 
         AmountOfCitiesException exception = assertThrows(
                 AmountOfCitiesException.class,
@@ -164,12 +163,11 @@ class GameRulesTest {
     }
 
     @Test
-    void AmountOFTheCitiesIsTooLow() throws BoardDimensionsException, GameParameterIsAlreadySetException {
+    void AmountOFTheCitiesIsTooLow() throws BoardDimensionsException, GameParameterIsAlreadySetException, NoGameParameterException {
 
         gameRules.setBoardHeight(10);
         gameRules.setBoardWidth(20);
-        int minAmountOfCities = gameRules.getBoardHeight() * gameRules.getBoardWidth()
-                / gameRules.getMinProcentRatioOfCitiesToTheNumberOfFields();
+        int minAmountOfCities = gameRules.getMinAmountOfCities();
 
         AmountOfCitiesException exception = assertThrows(
                 AmountOfCitiesException.class,
@@ -182,29 +180,27 @@ class GameRulesTest {
     }
 
     @Test
-    void AmountOfTheCitiesIsAsMuchAsMinProcentRatioOfCitiesToTheNumberOfFields() throws BoardDimensionsException, GameParameterIsAlreadySetException {
+    void AmountOfTheCitiesIsAsMuchAsMinProcentRatioOfCitiesToTheNumberOfFields() throws BoardDimensionsException, GameParameterIsAlreadySetException, NoGameParameterException, AmountOfCitiesException {
 
         gameRules.setBoardHeight(10);
         gameRules.setBoardWidth(20);
-        int minAmountOfCities = gameRules.getBoardHeight() * gameRules.getBoardWidth()
-                / gameRules.getMinProcentRatioOfCitiesToTheNumberOfFields();
+        int minAmountOfCities = gameRules.getMinAmountOfCities();
 
         Assertions.assertTrue(gameRules.setAmountOfCities(minAmountOfCities));
     }
 
     @Test
-    void AmountOfTheCitiesIsAsMuchAsMaxProcentRatioOfCitiesToTheNumberOfFields() throws BoardDimensionsException, GameParameterIsAlreadySetException {
+    void AmountOfTheCitiesIsAsMuchAsMaxProcentRatioOfCitiesToTheNumberOfFields() throws BoardDimensionsException, GameParameterIsAlreadySetException, NoGameParameterException, AmountOfCitiesException {
 
         gameRules.setBoardHeight(10);
         gameRules.setBoardWidth(20);
-        int maxAmountOfCities = gameRules.getBoardHeight() * gameRules.getBoardWidth()
-                / gameRules.getMaxProcentRatioOfCitiesToTheNumberOfFields();
+        int maxAmountOfCities = gameRules.getMaxAmountOfCities();
 
         Assertions.assertTrue(gameRules.setAmountOfCities(maxAmountOfCities));
     }
 
     @Test
-    void AmountOfTheCitiesIsOk() throws BoardDimensionsException, GameParameterIsAlreadySetException {
+    void AmountOfTheCitiesIsOk() throws BoardDimensionsException, GameParameterIsAlreadySetException, AmountOfCitiesException {
 
         gameRules.setBoardHeight(10);
         gameRules.setBoardWidth(20);
@@ -213,7 +209,7 @@ class GameRulesTest {
     }
 
     @Test
-    void setAmountOfTheCitiesAgain() throws BoardDimensionsException, GameParameterIsAlreadySetException {
+    void setAmountOfTheCitiesAgain() throws BoardDimensionsException, GameParameterIsAlreadySetException, AmountOfCitiesException {
 
         gameRules.setBoardHeight(10);
         gameRules.setBoardWidth(20);

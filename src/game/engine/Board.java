@@ -1,5 +1,8 @@
 package game.engine;
 
+import game.engine.tools.GameRules;
+import game.engine.tools.exceptions.NoGameParameterException;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
@@ -15,12 +18,12 @@ public class Board {
     private Set<Connection> connections;
 
 
-    public Board(int width, int height, int amountOfCities) {
+    public Board(GameRules gameRules) throws NoGameParameterException {
 
-        this.width = width;
-        this.height = height;
+        this.width = gameRules.getBoardWidth();
+        this.height = gameRules.getBoardHeight();
         fields = new Field[width][height];
-        generateCities(amountOfCities);
+        generateCities(gameRules.getAmountOfCities());
         placeCities();
         connectCities();
     }
